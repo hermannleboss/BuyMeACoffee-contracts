@@ -8,8 +8,17 @@ const hre = require("hardhat")
 
 // Returns the Ethere balance of a given address.
 async function getBalance(address) {
-  const balanceBigInt = await hre.waffle.provider.getBalance(address)
+  const balanceBigInt = await hre.ethers.provider.getBalance(address)
   return hre.ethers.utils.formatEther(balanceBigInt)
+}
+
+// Logs the ether balances for a list of addresses
+async function printBalances(addresses) {
+  let idx = 0
+  for (const address of addresses) {
+    console.log(`Address ${idx} balance: `, await getBalance(address))
+    idx++
+  }
 }
 
 // Logs the memos stored on-chain form coffee purchases.
@@ -24,20 +33,46 @@ async function printMemos(memos) {
 }
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000)
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS
+  //GEt example accounts
+  const [owner, tipper, tipper2, tipper3] = await hre.ethers.getSigners()
 
-  const lockedAmount = hre.ethers.utils.parseEther("1")
+  // Get the contract to deploy
+  const BuyMeACoffee = await hre.ethers.getContractFactory("BuyMeACoffee")
+  const buyMeACoffee = await BuyMeACoffee.deploy()
+  await buyMeACoffee.deployed()
+  console.log("BuyMeACoffee deployed to ", buyMeACoffee.address)
 
-  const Lock = await hre.ethers.getContractFactory("Lock")
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount })
+  // Check balances before the coffee purchase.
+  const address = [owner.address, tipper.address, buyMeACoffee.address]
+  // You can display all tipper address here
+  // const address = [owner.address, tipper.address, tipper2.address, tipper3.address, buyMeACoffee.address]
+  console.log("===start===")
+  await printBalances(address)
 
-  await lock.deployed()
+  // Buy the owner a few coffees.
 
-  console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`,
-  )
+  const tip = { value: hre.ethers.utils.parseEther("1") }
+  await buyMeACoffee.connect(tipper).buyCoffee("Carolina", "You're the best!", tip)
+  await buyMeACoffee.connect(tipper2).buyCoffee("Victor", "Amazing teacher : ", tip)
+  await buyMeACoffee.connect(tipper3).buyCoffee("Kay", "I Love my proof of Knowledge", tip)
+
+  // Check balances after coffee purchase.
+  console.log("=== Bought Coffee ===")
+  await printBalances(address)
+
+  // Withdraw funds.
+
+  await buyMeACoffee.connect(owner).withdrawTis()
+
+  // Check balance after withdraw.
+  console.log("=== Withdraw Tips ===")
+  await printBalances(address)
+
+  // Read all the memos left for the owner.
+
+  console.log("=== Memos ===")
+  const memos = await buyMeACoffee.getMemos()
+  await printMemos(memos)
 }
 
 // We recommend this pattern to be able to use async/await everywhere

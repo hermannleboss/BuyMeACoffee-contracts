@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 // Uncomment this line to use console.log
 //import "hardhat/console.sol";
 
-contract ByMeACoffee {
+contract BuyMeACoffee {
 
     //Event to emit when a Memo is create
     event NewMemo(
@@ -25,10 +25,13 @@ contract ByMeACoffee {
     // List of all memos received form friends.
     Memo [] memos;
 
-    // Address of contract deployer
+    // Address of contract deployer Marked payable so that
+    // we can withdraw to this address later.
     address  payable owner;
 
     constructor(){
+        // Store the address of the deployer as a payable address.
+        // When we withdraw funds, we'll withdraw here.
         owner = payable(msg.sender);
     }
 
