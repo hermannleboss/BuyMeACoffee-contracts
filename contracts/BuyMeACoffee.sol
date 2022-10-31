@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 // Uncomment this line to use console.log
 //import "hardhat/console.sol";
 
-// Deploy to GOerli at 0x81467A7F01B52e45A8b227395C3Abe20e0687043
+// Deploy to Goerli at 0x81467A7F01B52e45A8b227395C3Abe20e0687043
 
 contract BuyMeACoffee {
 
@@ -66,7 +66,7 @@ contract BuyMeACoffee {
     /**
     * @dev Send the entire balance stored in this contract to the owner
     */
-    function withdrawTis() public {
+    function withdrawTips() public {
         require(owner.send(address(this).balance));
     }
 

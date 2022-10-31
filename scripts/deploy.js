@@ -2,6 +2,7 @@ const hre = require("hardhat")
 async function main (){
 
   // Get the contract to deploy
+  console.log("=== Start deployment===")
   const BuyMeACoffee = await hre.ethers.getContractFactory("BuyMeACoffee")
   const buyMeACoffee = await BuyMeACoffee.deploy()
   await buyMeACoffee.deployed()
