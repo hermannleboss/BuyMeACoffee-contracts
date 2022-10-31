@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 // Uncomment this line to use console.log
 //import "hardhat/console.sol";
 
-// Deploy to Goerli at 0x81467A7F01B52e45A8b227395C3Abe20e0687043
+// Deploy to Goerli at 0x8B0cF5b24fdD63306A58F4205760674706512BcA
 
 contract BuyMeACoffee {
 
