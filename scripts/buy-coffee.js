@@ -60,9 +60,16 @@ async function main() {
   console.log("=== Bought Coffee ===")
   await printBalances(address)
 
+  //change withdraw address to tipper
+  console.log("=== ChangeAddress ===")
+  await buyMeACoffee.connect(owner).changeAddress(tipper.address, tip)
+
+  //You can add directly the address lik this
+  // await buyMeACoffee.connect(owner).changeAddress("0x70997970C51812dc3A010C7d01b50e0d17dc79C8", tip)
+
   // Withdraw funds.
 
-  await buyMeACoffee.connect(owner).withdrawTis()
+  await buyMeACoffee.connect(owner).withdrawTips()
 
   // Check balance after withdraw.
   console.log("=== Withdraw Tips ===")

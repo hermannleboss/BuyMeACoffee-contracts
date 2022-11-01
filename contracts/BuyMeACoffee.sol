@@ -29,12 +29,18 @@ contract BuyMeACoffee {
 
     // Address of contract deployer Marked payable so that
     // we can withdraw to this address later.
-    address  payable owner;
+    address payable owner;
+    address payable withdrawAddress;
 
     constructor(){
         // Store the address of the deployer as a payable address.
         // When we withdraw funds, we'll withdraw here.
         owner = payable(msg.sender);
+        withdrawAddress = payable(msg.sender);
+    }
+    function changeAddress(address payable _withdrawAddress) public payable {
+        require(msg.sender == owner, "only the owner can change the address");
+        withdrawAddress = _withdrawAddress;
     }
 
     /**
@@ -67,8 +73,9 @@ contract BuyMeACoffee {
     * @dev Send the entire balance stored in this contract to the owner
     */
     function withdrawTips() public {
-        require(owner.send(address(this).balance));
+        require(withdrawAddress.send(address(this).balance));
     }
+
 
 
     /**
