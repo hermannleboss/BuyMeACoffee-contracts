@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 // Uncomment this line to use console.log
 //import "hardhat/console.sol";
 
-// Deploy to Goerli at 0x8B0cF5b24fdD63306A58F4205760674706512BcA
+// Deploy to Goerli at 0x74daC7dA583473150798167Bf1AbC387b6E9E9EA
 
 contract BuyMeACoffee {
 
@@ -38,6 +38,7 @@ contract BuyMeACoffee {
         owner = payable(msg.sender);
         withdrawAddress = payable(msg.sender);
     }
+
     function changeAddress(address payable _withdrawAddress) public payable {
         require(msg.sender == owner, "only the owner can change the address");
         withdrawAddress = _withdrawAddress;
@@ -66,7 +67,6 @@ contract BuyMeACoffee {
             _name,
             _message
         );
-
     }
 
     /**
